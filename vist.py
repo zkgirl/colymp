@@ -136,7 +136,7 @@ def m2():
             clr(); tot=sum(val) or 1
             for i,v in enumerate(val):
                 pct=v/tot*100
-                print(f"{lbl[i][:12]:12}: {pct:5.1f}% {'█'*int(pct/2)}")
+                print("\n"+f"{lbl[i][:12]:12}: {pct:5.1f}% {'█'*int(pct/2)}")
         else:
             print("Invalid choice")
     except:
@@ -488,4 +488,5 @@ if __name__=="__main__":
     clr()
     print("ViST - Visual Studio 500 starting...")
     main()
+
 
