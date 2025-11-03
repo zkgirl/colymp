@@ -13,6 +13,7 @@ try:import cv2
 except:cv2=None
 # Clear-screen helper for Windows/Linux terminals
 def clr():os.system('cls' if os.name=='nt' else 'clear')
+    
 # MODE 1: Image to ASCII - setup and user choices
 def m1():
     print("\n"+"="*70+"\n\033[1;36mMODE 1: IMAGE → ASCII ART 🎨\033[0m\n"+"="*70)
@@ -98,6 +99,7 @@ def m1():
                 print(f"\033[1;31m⚠️  Save failed: {e}\033[0m")
     except Exception as e:print(f"\033[1;31m⚠️  Error: {e}\033[0m")
     input("\n[Enter to continue]")
+    
 # MODE 2: simple terminal visualizations (bar/line/pie)
 def m2():
     print("\n\033[1;36mMODE 2: DATA VISUALIZATION\033[0m")
@@ -150,6 +152,7 @@ def m2():
                 print(f"{labels[i][:12]:12}: {pct:5.1f}% "+"█"*int(pct/2))
         except: print("Invalid input")
     input("\n[Enter to continue]")
+    
 # MODE 3: Runner game loop with speed scaling per 100 points
 def m3():
     print("\n"+"="*60+"\nMODE 3: RAPTORS GO 🦖\n"+"="*60+"\n🎮 SPACE=Jump | Q=Quit\n")
@@ -245,6 +248,7 @@ def m3():
     sys.stdout.write("\033[?25h");
     print(f"\n\033[1;33mGame Over! Score:{scr} Time:{int(time.time()-st_time)}s\033[0m")
     input("[Enter]")
+    
 # MODE 4: Video → ASCII with optional preprocessing and binary writes
 def m4():
     if not cv2:print("OpenCV not installed!"); input("Enter..."); return
