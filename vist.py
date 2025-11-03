@@ -103,56 +103,46 @@ def m1():
 # MODE 2: simple terminal visualizations (bar/line/pie)
 def m2():
     print("\n\033[1;36mMODE 2: DATA VISUALIZATION\033[0m")
-    print("[1] Bar  \n[2] Line  \n[3] Pie")
-    ch=input("> ").strip()
-    if ch=='1':
-        try:
-            n=int(input("Items: "))
-            if n<=0: raise ValueError
-            labels=[]; values=[]
-            for i in range(n):
-                labels.append(input(f"Label {i+1}: "))
-                values.append(float(input(f"Value {i+1}: ")))
-            clr(); mx=max(values) if values else 1
-            scale=60/(mx if mx>0 else 1)
-            for i,v in enumerate(values):
-                bar=int(v*scale)
-                print(f"{labels[i][:12]:12} | "+"█"*bar+f" {v:.2f}")
-        except: print("Invalid input")
-    elif ch=='2':
-        try:
-            n=int(input("Points: "))
-            if n<2: raise ValueError
-            ys=[float(input(f"Y{i+1}: ")) for i in range(n)]
-            clr(); h,w=20,60
-            mn,mx=min(ys),max(ys); rng=(mx-mn) or 1
-            pts=[(int(i*(w-1)/(n-1)), h-1-int((ys[i]-mn)/rng*(h-1))) for i in range(n)]
-            grid=[[" " for _ in range(w)] for _ in range(h)]
-            for x,y in pts: grid[y][x]='●'
+    print("[1] Bar\n[2] Line\n[3] Pie")
+    ch = input("> ").strip()
+    try:
+        if ch == '1':  # ---- BAR ----
+            raw = input("Enter Label:Value pairs (comma separated):\n> ")
+            parts = [p.split(':') for p in raw.split(',')]
+            lbl, val = zip(*[(a.strip(), float(b.strip())) for a,b in parts])
+            clr(); mx = max(val) or 1; scale = 60/mx
+            for i,v in enumerate(val):
+                print("\n"+f"{lbl[i][:12]:12} | {'█'*int(v*scale)} {v:.2f}")
+
+        elif ch == '2':  # ---- LINE ----
+            raw = input("Enter Y values (comma separated):\n> ")
+            ys = [float(x.strip()) for x in raw.split(',')]
+            if len(ys)<2: raise ValueError
+            clr(); h,w = 20,60; mn,mx = min(ys),max(ys); rng = (mx-mn) or 1
+            pts=[(int(i*(w-1)/(len(ys)-1)), h-1-int((y-mn)/rng*(h-1))) for i,y in enumerate(ys)]
+            g=[[" " for _ in range(w)] for _ in range(h)]
+            for x,y in pts: g[y][x]='●'
             for i in range(len(pts)-1):
-                x1,y1=pts[i]; x2,y2=pts[i+1]
-                dx=max(1,abs(x2-x1))
+                x1,y1=pts[i]; x2,y2=pts[i+1]; dx=max(1,abs(x2-x1))
                 for t in range(1,dx):
-                    x=x1+int((x2-x1)*t/dx)
-                    y=y1+int((y2-y1)*t/dx)
-                    if 0<=x<w and 0<=y<h: grid[y][x]='·'
-            for row in grid: print(''.join(row))
-        except: print("Invalid input")
-    elif ch=='3':
-        try:
-            n=int(input("Categories: "))
-            if n<=0: raise ValueError
-            labels=[]; values=[]
-            for i in range(n):
-                labels.append(input(f"Name {i+1}: "))
-                values.append(float(input(f"Value {i+1}: ")))
-            clr(); tot=sum(values) or 1
-            for i,v in enumerate(values):
+                    x=x1+int((x2-x1)*t/dx); y=y1+int((y2-y1)*t/dx)
+                    if 0<=x<w and 0<=y<h: g[y][x]='·'
+            for r in g: print(''.join(r))
+
+        elif ch == '3':  # ---- PIE ----
+            raw = input("Enter Name:Value pairs (comma separated):\n> ")
+            parts = [p.split(':') for p in raw.split(',')]
+            lbl, val = zip(*[(a.strip(), float(b.strip())) for a,b in parts])
+            clr(); tot=sum(val) or 1
+            for i,v in enumerate(val):
                 pct=v/tot*100
-                print(f"{labels[i][:12]:12}: {pct:5.1f}% "+"█"*int(pct/2))
-        except: print("Invalid input")
+                print(f"{lbl[i][:12]:12}: {pct:5.1f}% {'█'*int(pct/2)}")
+        else:
+            print("Invalid choice")
+    except:
+        print("Invalid input")
     input("\n[Enter to continue]")
-    
+
 # MODE 3: Runner game loop with speed scaling per 100 points
 def m3():
     print("\n"+"="*60+"\nMODE 3: RAPTORS GO 🦖\n"+"="*60+"\n🎮 SPACE=Jump | Q=Quit\n")
@@ -498,3 +488,4 @@ if __name__=="__main__":
     clr()
     print("ViST - Visual Studio 500 starting...")
     main()
+
